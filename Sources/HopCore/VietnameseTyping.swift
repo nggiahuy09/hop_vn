@@ -214,14 +214,22 @@ public struct VietnameseComposer: Sendable {
         return true
     }
 
-    /// â ê ô. Telex asks for the same letter twice, and only the last vowel of
-    /// the word may take it; VNI's 6 takes the last a, e or o.
+    /// â ê ô. Telex asks for the same letter again: the last vowel of the group
+    /// takes it, and so does an earlier one when the letter typed as it is
+    /// would leave no vowel group at all (`ddaya` → đây, `cuoio` → cuôi, but
+    /// `ngoeo` stays); VNI's 6 takes the last a, e or o.
     private mutating func circumflex(only base: Character?, _ key: Character, _ upper: Bool) -> Bool {
         guard let range = vowelRange() else { return false }
         let index: Int
         if let base {
-            guard letters[range.upperBound - 1].base == base else { return false }
-            index = range.upperBound - 1
+            if letters[range.upperBound - 1].base == base {
+                index = range.upperBound - 1
+            } else if let earlier = range.reversed().first(where: { letters[$0].base == base && letters[$0].mark == .none }),
+                      circumflexBeatsLiteral(at: earlier, key, upper) {
+                index = earlier
+            } else {
+                return false
+            }
         } else {
             guard let found = range.reversed().first(where: { "aeo".contains(letters[$0].base) })
             else { return false }
@@ -237,6 +245,15 @@ public struct VietnameseComposer: Sendable {
             return false
         }
         return true
+    }
+
+    private func circumflexBeatsLiteral(at index: Int, _ key: Character, _ upper: Bool) -> Bool {
+        var literal = self
+        literal.letters.append(Letter(base: key, upper: upper))
+        if literal.isViable() { return false }
+        var marked = self
+        marked.letters[index].mark = .circumflex
+        return marked.isViable()
     }
 
     private mutating func telexW(_ upper: Bool) -> Bool {

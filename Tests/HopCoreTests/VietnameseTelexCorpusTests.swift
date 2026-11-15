@@ -50,7 +50,12 @@ final class VietnameseTelexCorpusTests: XCTestCase {
     private func marksCanWait(_ p: [Piece]) -> Bool {
         guard let range = S.nucleus(p) else { return p.allSatisfy { $0.mark == .none || $0.mark == .stroke } }
         let indexes = Array(range)
-        for i in indexes where p[i].mark == .circumflex && i != indexes.last { return false }
+        for i in indexes where p[i].mark == .circumflex {
+            // it goes to the last unmarked vowel of its letter
+            if indexes.contains(where: { $0 > i && p[$0].mark == .none && S.lower(p[$0].letter) == S.lower(p[i].letter) }) {
+                return false
+            }
+        }
         let hornLike = indexes.filter { p[$0].mark == .horn || p[$0].mark == .breve }
         if hornLike.count > 1 {
             let pair = hornLike.count == 2 && hornLike[1] == hornLike[0] + 1

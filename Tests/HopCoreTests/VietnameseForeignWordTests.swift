@@ -84,6 +84,8 @@ final class VietnameseForeignWordTests: XCTestCase {
         XCTAssertEqual(S.screen("diffff", .telex), "dif" + "ff")
         XCTAssertEqual(S.screen("wow", .telex), "ươ")
         XCTAssertEqual(S.screen("awk", .telex), "ăk")
+        XCTAssertEqual(S.screen("toast", .telex), "toát")
+        XCTAssertEqual(S.screen("queue", .telex), "quêu", "the circumflex key reaches the first e")
     }
 
     func testAWordPutBackKeepsTheKeyThatEndedIt() {

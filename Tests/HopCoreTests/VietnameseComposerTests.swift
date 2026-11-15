@@ -310,6 +310,28 @@ final class VietnameseComposerTests: XCTestCase {
         XCTAssertEqual(typedAndEnded("xoawn"), "xoăn")
     }
 
+    /// The circumflex key may come after the other letters of the vowel group.
+    func testACircumflexKeyAfterTheRestOfTheVowels() {
+        XCTAssertEqual(typedAndEnded("ddaya"), "đây")
+        XCTAssertEqual(typedAndEnded("dday"), "đay")
+        XCTAssertEqual(typedAndEnded("daua"), "dâu")
+        XCTAssertEqual(typedAndEnded("ddauaf"), "đầu")
+        XCTAssertEqual(typedAndEnded("yeue"), "yêu")
+        XCTAssertEqual(typedAndEnded("tieue"), "tiêu")
+        XCTAssertEqual(typedAndEnded("cuoios"), "cuối")
+        XCTAssertEqual(typedAndEnded("tuayas"), "tuấy")
+        XCTAssertEqual(typedAndEnded("toio"), "tôi")
+        XCTAssertEqual(typedAndEnded("Ddaya"), "Đây")
+        XCTAssertEqual(typedAndEnded("ddayaa"), "ddayaa", "no longer Vietnamese, so left as typed")
+    }
+
+    /// A vowel group the letters already make is not turned into another.
+    func testACircumflexKeyLeavesAWordThatIsAlreadyAVowelGroup() {
+        XCTAssertEqual(typedAndEnded("ngoeo"), "ngoeo")
+        XCTAssertEqual(typedAndEnded("ngoeos"), "ngoéo")
+        XCTAssertEqual(typedAndEnded("hoai"), "hoai")
+    }
+
     /// uă is no native vowel group; VNI can still ask for it with the 8.
     func testVniCanAskForUaWithABreve() {
         XCTAssertEqual(typedAndEnded("d9ua8", .vni), "đuă")

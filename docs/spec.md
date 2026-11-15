@@ -5051,7 +5051,11 @@ Found on 2026-09-17: a film downloaded, moved out of Downloads and removed with
   o), `dd` → đ, `s f r x j` → the five tones, `z` clears the tone. A `w`
   after `ua` is the horn of the u (`muaw` → mưa, `dduaw` → đưa), because ua has
   no breve; after `oa` it is the breve (`xoawn` → xoăn). A lone `w` with no
-  vowel before it is ư, and a second `w` takes it back. **VNI**: `1`–`5`
+  vowel before it is ư, and a second `w` takes it back. The second of the two
+  letters of â ê ô may come after the rest of the vowels (`ddaya` → đây,
+  `cuoio` → cuôi, `yeue` → yêu): it goes to the nearest earlier vowel of its
+  letter, but only when the letter typed as it is would not make a vowel group
+  (`ngoeo` stays; `queue` becomes quêu, which cannot be told apart). **VNI**: `1`–`5`
   the tones, `6` â ê ô, `7` ơ ư (ươ), `8` ă, `9` đ, `0` clears the tone. A
   method does not read the other's keys: `vieetj` in VNI and `viet65` in Telex
   type themselves.
