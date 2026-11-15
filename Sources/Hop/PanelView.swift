@@ -2829,14 +2829,14 @@ struct PanelView: View {
     // the tabs model (the monitor tab and the tracker+todos tab from `migrate`).
     // Adding one here would make `moduleOrder` append it AND `migrate` place it
     // in its own tab — a duplicate key the tabs model rejects.
-    private static let allModules = ["timer", "awake", "clipboard", "convert", "sound", "windows", "speedtest", "torrent", "color", "ocr", "shot", "annotate", "archive", "keyboard", "vpn", "uninstall", "network"]
+    private static let allModules = ["timer", "awake", "clipboard", "convert", "sound", "windows", "speedtest", "torrent", "color", "ocr", "shot", "annotate", "archive", "keyboard", "vietnamese", "vpn", "uninstall", "network"]
     static let defaultModuleOrder = ModuleCatalog.defaultModuleOrder
 
     /// Modules that ship HIDDEN. They serve a narrower audience (designers,
     /// developers) and must be a deliberate opt-in: an ordinary user should not
     /// find them cluttering the panel after an update. Torrent is not here, it
     /// is handled by its own toggle below.
-    private static let optInModules = ["color", "ocr", "vpn"]
+    private static let optInModules = ["color", "ocr", "vpn", "vietnamese"]
 
     /// Modules INTRODUCED in this release that must NOT appear until they are
     /// asked for. Empty for the markup pair by Anton's decision (2026-09-09):
@@ -3314,6 +3314,7 @@ struct PanelView: View {
         case "archive": return t(.archiveLabel)
         case "uninstall": return t(.uninstallLabel)
         case "keyboard": return t(.keylockLabel)
+        case "vietnamese": return t(.vietnameseLabel)
         case "system": return t(.tabSystem)
         case "tracker": return t(.trackerLabel)
         case "todos": return t(.todosLabel)
@@ -3399,6 +3400,9 @@ struct PanelView: View {
         case "keyboard":
             KeyboardLockView(lock: model.keyboardLock, lang: lang,
                              closePanel: { model.closePanel?() })
+                .id(model.themeVersion)
+        case "vietnamese":
+            VietnameseTypingView(typing: model.vietnamese, lang: lang)
                 .id(model.themeVersion)
         case "system":
             StatsView(stats: model.stats, lang: lang, preview: !previewModules.isEmpty)
@@ -5192,6 +5196,7 @@ struct PanelView: View {
         case "archive": return "archivebox"
         case "uninstall": return "trash"
         case "keyboard": return "keyboard"
+        case "vietnamese": return "character.cursor.ibeam"
         case "color": return "paintpalette"
         case "ocr": return "text.viewfinder"
         case "shot": return "camera.viewfinder"

@@ -70,7 +70,7 @@ final class OnboardingSoundTests: XCTestCase {
     func testMacPicturesStayTogetherAndSoundIsOnTheNextScreen() {
         let groups = ModuleGroup.all
         let mac = groups.firstIndex { $0.titleKey == .onbGroupMac }!
-        XCTAssertEqual(groups[mac].modules, ["system", "awake", "keyboard"])
+        XCTAssertEqual(groups[mac].modules, ["system", "awake", "keyboard", "vietnamese"])
         XCTAssertEqual(groups[mac + 1].modules, ["sound"])
         XCTAssertEqual(groups.flatMap(\.modules).filter { $0 == "sound" }.count, 1)
     }
