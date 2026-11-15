@@ -186,7 +186,6 @@ closed (handy for downloads, long builds and external displays).
 In Settings > menu bar, choose and reorder system readings and module states.
 Show them side by side or in turn; keep the existing icon-only mode when preferred.
 
-
 CPU and GPU load and temperature, memory and swap, network, disk, battery
 health and power draw – live values with sparkline charts, color thresholds
 you set yourself, °C/°F, and an uptime line. Readings come straight from macOS
@@ -383,6 +382,17 @@ still forces the Mac off, because that is handled in hardware.
 </div>
 
 → [Lock your Mac keyboard](https://hop.tools/features/keyboard-lock/)
+
+### Vietnamese typing
+
+Type Vietnamese in any app, in Telex or VNI. Tap Telex or VNI on the module's
+row and `vieetj` becomes `việt` and `dduwowcj` becomes `được`; in VNI,
+`viet65` does the same. `⌃⌥V` flips between off and the method you used last.
+Words that are not Vietnamese are left as you typed them: `clear`, `show` and
+`git` read right as you type, and `text` is put back when you press space.
+Nothing you type is recorded or kept, and password fields are never touched. It
+needs the accessibility permission, like the keyboard lock. The module ships
+hidden: switch it on in the settings.
 
 ### Speed test
 
@@ -595,8 +605,8 @@ and the settings window lists them all with their current state:
   optional helpers (the torrent engine and the 7-Zip archiver)
 - **network – torrents, speed test** – peer traffic while the torrent module is
   on; the speed test runs macOS's own networkQuality against Apple's servers
-- **accessibility** – pasting into the app underneath, the window manager and
-  the keyboard lock
+- **accessibility** – pasting into the app underneath, the window manager, the
+  keyboard lock and Vietnamese typing
 - **screen recording** – text recognition while it frames an area, screenshots,
   and the loupe and the blur on the drawing layer; the color picker does not
   need it

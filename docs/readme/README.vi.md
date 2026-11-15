@@ -358,6 +358,16 @@ cứng.
 
 → [Lock your Mac keyboard](https://hop.tools/features/keyboard-lock/)
 
+### Gõ tiếng Việt
+
+Gõ tiếng Việt trong mọi ứng dụng, kiểu Telex hoặc VNI. Bấm Telex hay VNI trên
+dòng của mô-đun, rồi `vieetj` thành `việt` và `dduwowcj` thành `được`; với VNI
+thì `viet65` cho cùng kết quả. `⌃⌥V` chuyển qua lại giữa tắt và kiểu gõ bạn dùng
+gần nhất. Từ không phải tiếng Việt được giữ nguyên như bạn gõ: `clear`, `show`,
+`git` hiện đúng ngay khi gõ, còn `text` được trả lại khi bạn nhấn dấu cách. Không
+có gì bạn gõ bị ghi lại hay lưu giữ, và ô mật khẩu không bao giờ bị chạm tới. Cần
+quyền trợ năng, giống khoá bàn phím. Mô-đun mặc định ẩn: bật trong cài đặt.
+
 ### Kiểm tra tốc độ
 
 Một chạm là đo đường truyền bằng chính networkQuality của macOS, đối với máy chủ của Apple – tải xuống, tải lên và độ phản hồi, kết quả cuối cùng ở lại trong hàng.
@@ -526,7 +536,8 @@ của ứng dụng liệt kê tất cả kèm trạng thái hiện tại:
   trợ tuỳ chọn (engine torrent và trình nén 7-Zip)
 - **mạng – torrent, đo tốc độ** – lưu lượng tới các peer khác khi bật mô-đun
   torrent; phép đo dùng networkQuality của macOS tới máy chủ Apple
-- **trợ năng** – dán vào ứng dụng bên dưới, trình quản lý cửa sổ và khoá bàn phím
+- **trợ năng** – dán vào ứng dụng bên dưới, trình quản lý cửa sổ, khoá bàn phím và
+  gõ tiếng Việt
 - **ghi màn hình** – nhận dạng văn bản khi khoanh vùng, ảnh màn hình, cùng kính
   lúp và làm mờ trên lớp vẽ; ống hút màu không cần
 - **thông báo** – báo hết giờ của bộ đếm và torrent đã xong
