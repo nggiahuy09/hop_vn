@@ -34,6 +34,7 @@ final class AppModel: ObservableObject {
     let holdDraw: HoldDrawController?
     let archive = ArchiveController()
     let keyboardLock = KeyboardLockController()
+    let vietnamese: VietnameseTypingController
     let vpn: VPNController
     let uninstall = UninstallController()
     let appShelves: AppShelvesController
@@ -167,6 +168,7 @@ final class AppModel: ObservableObject {
         vpn = VPNController(demo: preview)
         speedTest = preview ? SpeedTestController(demo: true) : SpeedTestController()
         appShelves = AppShelvesController(demo: preview)
+        vietnamese = VietnameseTypingController(demo: preview)
         soundStatus = SoundMuteStatus()
         sound = soundController ?? SoundController(enabled: { preview || ModuleActivation.isOn("sound") }, status: soundStatus)
         soundMixer = mixerController ?? SoundMixerController(enabled: { !preview && ModuleActivation.isOn("sound") })
@@ -247,6 +249,9 @@ final class AppModel: ObservableObject {
             self?.panelModuleChanged()
         })
         forwarders.append(keyboardLock.objectWillChange.sink { [weak self] in
+            self?.panelModuleChanged()
+        })
+        forwarders.append(vietnamese.objectWillChange.sink { [weak self] in
             self?.panelModuleChanged()
         })
         forwarders.append(converter.objectWillChange.sink { [weak self] in

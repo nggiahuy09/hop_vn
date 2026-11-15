@@ -283,6 +283,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusController = StatusItemController(model: model)
         // the controllers were built before the launch migrations wrote the layout
         ModuleActivation.announceChange()
+        model.vietnamese.start()
         startReminders()
         startAgentBridge()
 
@@ -629,6 +630,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             "keyboard": { [weak self] in
                 self?.model.activity.note()
                 self?.model.keyboardLock.lock()
+            },
+            "vietnamese": { [weak self] in
+                self?.model.activity.note()
+                self?.model.vietnamese.toggle()
             },
             "sound": { [weak self] in self?.showSoundWindow() },
             "convert": { [weak self] in self?.showConverterWindow() },

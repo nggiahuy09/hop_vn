@@ -140,6 +140,10 @@ public enum ModuleCatalog {
             ModuleAction(id: "open", storageKey: "hotkey_keyboardLock", hotKeyID: 6,
                          defaultCombo: ModuleCombo(keyCode: 40, modifiers: controlOption)),
         ]),
+        ModuleEntry(id: "vietnamese", hiddenOnFirstRun: true, guideLetter: "v", actions: [
+            ModuleAction(id: "open", storageKey: "hotkey_vietnamese", hotKeyID: 40,
+                         defaultCombo: ModuleCombo(keyCode: 9, modifiers: controlOption)),
+        ]),
         ModuleEntry(id: "vpn", hiddenOnFirstRun: true, guideLetter: "n", actions: []),
         ModuleEntry(id: "network", guideLetter: "x", actions: []),
         ModuleEntry(id: "uninstall", guideLetter: "u", actions: [
@@ -227,7 +231,7 @@ public enum ModuleCatalog {
         OnboardingGroup(titleID: "onbGroupFiles", modules: ["convert", "archive"]),
         OnboardingGroup(titleID: "onbGroupScreen", modules: ["clipboard", "color", "ocr"]),
         OnboardingGroup(titleID: "onbGroupMarkup", modules: ["shot", "annotate"]),
-        OnboardingGroup(titleID: "onbGroupMac", modules: ["system", "awake", "keyboard"]),
+        OnboardingGroup(titleID: "onbGroupMac", modules: ["system", "awake", "keyboard", "vietnamese"]),
         OnboardingGroup(titleID: "soundLabel", modules: ["sound"]),
         OnboardingGroup(titleID: "onbGroupNetwork", modules: ["speedtest", "vpn", "torrent", "network"]),
         OnboardingGroup(titleID: "onbGroupDesk", modules: ["windows", "apps", "uninstall"]),
@@ -239,7 +243,7 @@ public enum ModuleCatalog {
             .init(id: "time", modules: ["timer", "tracker", "todos"]),
             .init(id: "files", modules: ["clipboard", "convert", "archive"]),
             .init(id: "screen", modules: ["color", "ocr", "shot", "annotate", "windows"]),
-            .init(id: "system", modules: ["system", "awake", "keyboard", "sound", "uninstall"]),
+            .init(id: "system", modules: ["system", "awake", "keyboard", "vietnamese", "sound", "uninstall"]),
             .init(id: "network", modules: ["speedtest", "vpn", "torrent", "network"]),
         ]
         return groups.map { group in

@@ -523,7 +523,7 @@ switched off earlier stands dimmed in its column and can still be placed.
 - The groups are `ModuleCatalog.onboardingGroups`, tested to cover every module
   exactly once: time (timer, tracker, to-dos) · files (converter, archives) ·
   screen and clipboard (clipboard, eyedropper, recognition) · the Mac itself
-  (monitor, sleep block, keyboard lock) · network (speed, vpn, torrents) ·
+  (monitor, sleep block, keyboard lock, vietnamese typing) · network (speed, vpn, torrents) ·
   everyday things (windows, apps, uninstaller). Each row is the module's icon,
   its name, the one-line `purpose*` the settings pages already use, and a switch.
   Sixteen switches on a single page said nothing about what any of them did.
@@ -5023,6 +5023,108 @@ Found on 2026-09-17: a film downloaded, moved out of Downloads and removed with
 - Hotkey `⌃⌥K`, module-gated like the other module hotkeys. The tap dies with
   the process, so a crash can never leave a locked keyboard behind.
 
+### Vietnamese typing
+
+- Module key `"vietnamese"`, title `vietnameseLabel` ("vietnamese typing"),
+  guide letter **v**, hotkey `⌃⌥V`, ships hidden like the other opt-in modules.
+  ONE line in the panel: the name and three chips — `off`, `Telex`, `VNI`. The
+  chips are the switch: choosing a method turns typing on, `off` turns it off.
+  "Telex" and "VNI" are names and are not translated. The hotkey flips between
+  `off` and the method used last (`vietnameseTypingLastMethod`), with the
+  keep-awake cue so the change is audible.
+- **The engine is `HopCore.VietnameseComposer`**, a value type that knows
+  nothing of the keyboard or the screen: a character goes in, an `Outcome`
+  comes out — `pass` (the key types itself), `boundary` (the key ends the word
+  and types itself) or `replace(delete:insert:)` (the key is swallowed and the
+  difference between the old and the new text is typed instead). The edit is
+  the common prefix of the old and the new word, counted in characters, so a
+  tone added to the last syllable of a long word costs a handful of
+  backspaces and not the whole word. Tested by `VietnameseComposerTests`,
+  which applies every outcome to a simulated screen.
+- **The word is rebuilt from letters, not patched.** The composer keeps the
+  letters of the syllable (base, mark, case) and ONE tone, and renders the text
+  from them on every key. Tone position is therefore always recomputed — a tone
+  typed on `hoa` moves with the letters that come after it — and taking a mark
+  back is just removing it. Text is produced with canonical composition (NFC),
+  so one Vietnamese letter is one character and one backspace removes it.
+- **Telex**: `aa ee oo` → â ê ô, `w` → ă ơ ư (and ươ when a u stands before an
+  o), `dd` → đ, `s f r x j` → the five tones, `z` clears the tone. A `w`
+  after `ua` is the horn of the u (`muaw` → mưa, `dduaw` → đưa), because ua has
+  no breve; after `oa` it is the breve (`xoawn` → xoăn). A lone `w` with no
+  vowel before it is ư, and a second `w` takes it back. **VNI**: `1`–`5`
+  the tones, `6` â ê ô, `7` ơ ư (ươ), `8` ă, `9` đ, `0` clears the tone. A
+  method does not read the other's keys: `vieetj` in VNI and `viet65` in Telex
+  type themselves.
+- **Taking a key back.** Pressing the key that made a mark or a tone a second
+  time removes it and types the key itself (`aaa` → `aa`, `ass` → `as`); from
+  there the rest of the word is typed as it is, so `asss` is `ass` and not a
+  new tone. A word that is not Vietnamese survives wherever the rules allow
+  (`new`, `hello`, `adding`): a mark key with no vowel to take it types itself,
+  and in Telex the second `d` strokes the first only right after it or after
+  the vowels that follow it (`ddos` and `dods` are both đó), never after a
+  consonant, so `adding` and `drd` are left alone. The price is that `dad` and
+  `did` read as Vietnamese; `⌃⌥V` is the way out.
+- **Where the tone goes.** `qu` and `gi` count as consonants while a vowel
+  follows them (`quá`, `giờ`, but `gì`). A vowel with a mark wins, the last one
+  if there are two (`ươ` → ơ, `iê` → ê); otherwise with a final consonant the
+  second vowel (`toán`), without one the first (`mái`, `múa`), and the middle
+  one of three (`ngoài`). Only `oa`, `oe` and `uy` without a final consonant
+  are a choice of style: `hòa khỏe thủy` by default, as the spelling rules and
+  Unikey have it, `hoà khoẻ thuỷ` when `vietnameseModernTones` is `true`. There
+  is no setting page for it yet.
+- **Words that are not Vietnamese are left as typed** (`clear`, `show`, `git`,
+  `window`). `HopCore.VietnameseSyllable` says what a syllable can be made of
+  (the onsets, the vowel groups, the final consonants, and that a final c, ch, p
+  or t takes only the acute and the dot); it is lenient on purpose, because
+  taking a Vietnamese word for a foreign one costs the person their word. The
+  composer keeps the keys as they were pressed and asks it twice. **While
+  typing**, a word that can no longer become Vietnamese (an onset like `cl`, `sh`,
+  `kn`, a final `d`, `k`, `l`, a tone a final stop does not take) is put back to
+  its keys at once and the rest of the word is typed as it is, so `clear` and
+  `show` read right as they are typed. A mark not typed yet is allowed for, so
+  `tuan` may still become `tuân`. **When the word ends** at a space, punctuation,
+  return or tab, one that is still not a whole Vietnamese syllable (`text` →
+  `tẽt`) is put back, as `Outcome.fix`: the edit is typed and the key that ended
+  the word types itself after it, so return and tab are never swallowed. Not
+  put back: a word the person took a key back from (`ass` → `as` is what they
+  asked for), a word after a backspace (keys and letters are out of step), and
+  letters with no vowel that carry the stroke of đ (`đc`, `đt`, `25.000đ`). `uă`
+  is no native vowel group and is let through all the same, so that VNI's `ua8`
+  (đuă) keeps its mark.
+  Cannot be told apart: a Vietnamese word spelled like an English one (`rust` →
+  rút, `var` → vả, `chown` → chơn), and in Telex the key typed twice takes a mark
+  back, so a doubled s, f, r, x or j loses a letter (`diff` → dif, `error` →
+  eror), as in Unikey; a letter typed once more types itself (`passs` → pass).
+- **A word ends** at a space, punctuation, a digit that is not a VNI key, any
+  non-ASCII character, a mouse click, a shortcut (⌘ ⌃ ⌥), the switch to another
+  app, or a key that does not type a character (arrows, return, tab). Backspace
+  follows the word one letter at a time while the text on screen can still be
+  told from the composer; when removing the letter would move a tone
+  (`hoà` → `ho`) the word is given up instead of guessing. A word never grows
+  past 32 letters.
+- **The tap** is a session `CGEventTap` (head-insert, active) over key down,
+  key up and the three mouse buttons. A swallowed key's release is swallowed
+  with it. The corrected text is posted as a backspace per character and one
+  Unicode key event, from a private event source with no modifiers, through
+  `CGEvent.tapPostEvent` with the callback's own proxy — the documented way to
+  inject events from inside a tap, which puts them in the stream just ahead of
+  this tap — and tagged with `eventSourceUserData` so the tap lets them by even
+  if one comes back. A tap that
+  macOS switches off (`tapDisabledByTimeout`) is switched back on.
+- **Permission: Accessibility**, the same switch the keyboard lock and the
+  window manager use, checked before typing is turned on. Without it the chip
+  does not take, the system dialog asks, and `AccessibilityWatch` carries the
+  banner. A stored method that cannot start at launch stays stored and shows
+  the icon in orange until the permission is back. Nothing typed is recorded
+  or kept; secure input (password fields) is never delivered to a tap.
+- **A module that is off is off everywhere**: switching the module off removes
+  the tap and stores `off`, so putting it back starts from `off`.
+- **Known limits.** A u and an o with a `w` are always ươ, so the few words that
+  are uơ (`thuở`, `huơ`) cannot be typed as `thuowr`. Editors that take over the text field (a browser's
+  address bar with an inline suggestion, some terminals) may swallow the first
+  backspace; apps that read raw key codes instead of text (games, remote
+  desktops) see the swallowed key as missing. Neither is worked around.
+
 ### Hotkeys (settings window)
 
 - **Every combination in one page and every one of them rebindable**
@@ -5052,8 +5154,8 @@ Found on 2026-09-17: a film downloaded, moved out of Downloads and removed with
 - **A function names its own key, and the zones move around IT** (Anton,
   2026-09-08). ⌃⌥ plus the first letter of what the thing is called: **S**
   screenshot, **D** draw on screen, **T** timer, **A** awake, **C** convert and
-  compress, **F** file archives, **U** uninstall apps, **K** keyboard lock,
-  **H** Hop's own panel. Two take a later letter because the first is spoken
+  compress, **F** file archives, **U** uninstall apps, **K** keyboard lock, **V** vietnamese
+  typing, **H** Hop's own panel. Two take a later letter because the first is spoken
   for: text recognition keeps **R**, and the colour picker takes the **O** of
   cOlour — the converter is reached far more often than the picker, so it gets
   the C (Anton, 2026-09-08). Every module that can be opened by a key now ships

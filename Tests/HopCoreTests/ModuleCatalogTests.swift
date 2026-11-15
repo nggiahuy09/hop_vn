@@ -9,7 +9,7 @@ final class ModuleCatalogTests: XCTestCase {
     func testIdentifiersAreUniqueAndMatchThePanelDefaults() {
         let ids = ModuleCatalog.modules.map(\.id)
         XCTAssertEqual(Set(ids).count, ids.count)
-        XCTAssertEqual(ids.count, 20)
+        XCTAssertEqual(ids.count, 21)
         XCTAssertTrue(ids.contains("timer"))
         XCTAssertTrue(ids.contains("todos"))
         XCTAssertTrue(ids.contains("uninstall"))
@@ -23,8 +23,8 @@ final class ModuleCatalogTests: XCTestCase {
         let withActions = ModuleCatalog.modules.filter { !$0.actions.isEmpty }.map(\.id)
         XCTAssertEqual(
             Set(withActions),
-            ["timer", "awake", "color", "ocr", "keyboard", "convert", "archive", "uninstall", "windows",
-             "shot", "annotate", "sound"]
+            ["timer", "awake", "color", "ocr", "keyboard", "vietnamese", "convert", "archive", "uninstall",
+             "windows", "shot", "annotate", "sound"]
         )
         for module in ModuleCatalog.modules where !module.actions.isEmpty && module.id != "windows" {
             XCTAssertEqual(module.actions.filter { $0.id == "open" }.count, 1, "module \(module.id)")
@@ -56,7 +56,7 @@ final class ModuleCatalogTests: XCTestCase {
             Set(withDefaults),
             ["hotkey_timer", "hotkey_awake", "hotkey_color", "hotkey_ocr", "hotkey_keyboardLock",
              "hotkey_shot", "hotkey_annotate", "hotkey_annotate_pass", "hotkey_convert",
-             "hotkey_archive", "hotkey_uninstall"]
+             "hotkey_archive", "hotkey_uninstall", "hotkey_vietnamese"]
         )
         XCTAssertNotNil(ModuleCatalog.panelAction.defaultCombo)
     }
@@ -93,7 +93,7 @@ final class ModuleCatalogTests: XCTestCase {
 
     func testModulesThatShipHiddenAreTheOptInOnes() {
         let hidden = ModuleCatalog.modules.filter(\.hiddenOnFirstRun).map(\.id)
-        XCTAssertEqual(Set(hidden), ["color", "ocr", "vpn"])
+        XCTAssertEqual(Set(hidden), ["color", "ocr", "vpn", "vietnamese"])
     }
 
     func testStorageKeysAreUniqueSoTwoActionsCannotShareASavedCombo() {
@@ -125,6 +125,7 @@ final class ModuleCatalogTests: XCTestCase {
         XCTAssertEqual(letters["archive"], "z")
         XCTAssertEqual(letters["ocr"], "o")
         XCTAssertEqual(letters["keyboard"], "k")
+        XCTAssertEqual(letters["vietnamese"], "v", "free letter; the site skips one it does not know")
         XCTAssertEqual(letters["speedtest"], "s")
         XCTAssertEqual(letters["vpn"], "n")
         XCTAssertEqual(letters["uninstall"], "u")

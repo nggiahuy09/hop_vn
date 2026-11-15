@@ -22,6 +22,7 @@ enum ModulePresentation {
         case "annotate": return .annotateLabel
         case "archive": return .archiveLabel
         case "keyboard": return .keylockLabel
+        case "vietnamese": return .vietnameseLabel
         case "vpn": return .vpnLabel
         case "network": return .networkLabel
         case "uninstall": return .uninstallLabel
@@ -49,6 +50,7 @@ enum ModulePresentation {
         case "annotate": return .purposeAnnotate
         case "archive": return .purposeArchive
         case "keyboard": return .purposeKeyboard
+        case "vietnamese": return .purposeVietnamese
         case "vpn": return .purposeVpn
         case "network": return .purposeNetwork
         case "uninstall": return .purposeUninstall
@@ -76,6 +78,7 @@ enum ModulePresentation {
         case "annotate": return [.docAnnotateFull]
         case "archive": return [.docArchiveFull]
         case "keyboard": return [.docKeylockFull]
+        case "vietnamese": return [.docVietnameseFull]
         case "vpn": return [.docVpnFull]
         case "network": return [.docNetworkFull]
         case "uninstall": return [.docUninstallFull]
@@ -103,6 +106,7 @@ enum ModulePresentation {
         case "annotate": return "pencil.tip"
         case "archive": return "archivebox"
         case "keyboard": return "keyboard"
+        case "vietnamese": return "character.cursor.ibeam"
         case "vpn": return "lock.shield"
         case "network": return "network.badge.shield.half.filled"
         case "uninstall": return "trash"
