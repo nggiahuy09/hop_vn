@@ -65,6 +65,12 @@ enum Sounds {
         play(on ? "Pop" : "Bottle", gain: 0.5)
     }
 
+    /// Vietnamese typing moved to the other method: one crisp tick, its own
+    /// sound so it is not mistaken for keep-awake's pop.
+    static func typingMethodTick() {
+        play("Tink", gain: 1)
+    }
+
     static func alarm() {
         play("Glass")
     }

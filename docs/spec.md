@@ -3216,6 +3216,15 @@ drawn list of programs with their verdicts rather than the window itself.
     Russian and in an English interface. Running on the CPU instead does not
     avoid the compile (154 s cold).
   `Hop --ocr-warmup [--ocr-selftest <image>…]` times it.
+- **The warm-up runs in its own process** (2026-11-18). Vision keeps every
+  model it loaded for the life of the process: warmed in the app itself, the
+  menu bar app sat at ~240 MB against ~86 MB without it. The app now starts
+  its own executable with `--ocr-warmup-child` (utility priority, output
+  discarded), which warms and exits; the compiled models land in the
+  on-disk cache for this executable, which the app reads from. `ocrWarmedFor`
+  is set only when the child exits with 0, so a failed run is retried at the
+  next launch. A real reading still loads the models it needs into the app,
+  as before.
 - **Before the warm-up has run** (Anton, 2026-09-28). The models cannot come
   with the update: macOS builds them on the Mac, for the executable in its
   place, and a copy of the same program at another path starts from nothing.
@@ -5029,9 +5038,15 @@ Found on 2026-09-17: a film downloaded, moved out of Downloads and removed with
   guide letter **v**, hotkey `⌃⌥V`, ships hidden like the other opt-in modules.
   ONE line in the panel: the name and three chips — `off`, `Telex`, `VNI`. The
   chips are the switch: choosing a method turns typing on, `off` turns it off.
-  "Telex" and "VNI" are names and are not translated. The hotkey flips between
-  `off` and the method used last (`vietnameseTypingLastMethod`), with the
-  keep-awake cue so the change is audible.
+  "Telex" and "VNI" are names and are not translated. The hotkey trades
+  Telex and VNI; from `off` it turns typing on with the method used last
+  (`vietnameseTypingLastMethod`). `off` is reached only by its chip. Each
+  change plays one tick (`Sounds.typingMethodTick`, the system "Tink");
+  a blocked tap stays silent. ONE action, so ONE row in the
+  hotkey settings.
+- **Menu bar reading** `vietnamese` (Settings → menu bar): `Telex` or `VNI`
+  while typing is on, `—` while off, `!` while macOS blocks the tap. Off by
+  default like every reading; the bar redraws on each change of mode.
 - **The engine is `HopCore.VietnameseComposer`**, a value type that knows
   nothing of the keyboard or the screen: a character goes in, an `Outcome`
   comes out — `pass` (the key types itself), `boundary` (the key ends the word
@@ -7165,7 +7180,7 @@ Anton's primary install must always remain fully functional.
 
 - `/Applications/Hop.app` (bundle id com.antonshakirov.minimo) is the
   stable one, updated only by releases (after "publish") or by auto-update.
-- Day-to-day changes go into the parallel "Hop Dev.app":
+- Day-to-day changes go into the parallel "Hop VN.app":
   `./scripts/build-app.sh --install --dev` — its own bundle id
   (…minimo.dev), its own name and its own settings; it doesn't touch the
   main install and doesn't kill its process (pkill only by its own
@@ -7413,7 +7428,7 @@ is written the way its newest one is.
 - The production `/Applications/Hop.app` is updated ONLY through this
   channel; `build-app.sh --install` without `--dev`/`--prod` refuses
   to install.
-- The test build is "Hop Dev.app" (`--install --dev`), living in parallel;
+- The test build is "Hop VN.app" (`--install --dev`), living in parallel;
   its icon carries a gold "D" badge in the bottom-right corner so the
   production and test builds can't be confused.
 - Install staging (`temporaryDirectory/hop-update-<UUID>`) cannot be
@@ -7855,7 +7870,7 @@ before and after launch, without cleaning signature-breaking metadata afterward.
 
 ## Canonical Hop Dev review handoff (2.4)
 
-The installed working development application is `/Applications/Hop Dev.app`,
+The installed working development application is `/Applications/Hop VN.app`,
 bundle identifier `com.antonshakirov.minimo.dev`. A request to update that working
 copy does not authorize publishing a stable release, changing the public manifest
 or replacing `/Applications/Hop.app`. Hop Mix is available in both Dev and release

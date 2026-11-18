@@ -633,7 +633,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             },
             "vietnamese": { [weak self] in
                 self?.model.activity.note()
-                self?.model.vietnamese.toggle()
+                self?.model.vietnamese.switchMethod()
             },
             "sound": { [weak self] in self?.showSoundWindow() },
             "convert": { [weak self] in self?.showConverterWindow() },
@@ -1837,6 +1837,18 @@ struct HopApp: App {
                 exit(1)
             }
             print(version)
+            exit(0)
+        }
+        // SPEC: docs/spec.md — "The warm-up runs in its own process": the
+        // models are compiled for this executable and the process ends, so the
+        // ~150 MB Vision keeps in memory never lands in the menu bar app.
+        if CommandLine.arguments.contains(ScreenTextController.warmUpChildFlag) {
+            let semaphore = DispatchSemaphore(value: 0)
+            Task.detached {
+                await ScreenTextController.warmUp()
+                semaphore.signal()
+            }
+            semaphore.wait()
             exit(0)
         }
         // Dev-only entry points, gated out of release:
