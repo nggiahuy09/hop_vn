@@ -64,6 +64,9 @@ struct MenuBarReading {
             value = total > 0 ? "\(active.count) · " + String(format: "%.0f%%", progress / total * 100) : "—"
         case .outputMix: value = model.soundMixer.running ? "✓" : "—"
         case .inputMix: value = model.soundCallMix.running ? "✓" : "—"
+        case .vietnamese:
+            let typing = model.vietnamese
+            value = typing.isBlocked ? "!" : typing.mode == .telex ? "Telex" : typing.mode == .vni ? "VNI" : "—"
         default:
             return sensor(metric, sample: model.stats.sample, detailed: detailed, lang: lang, temperatureUnit: temperatureUnit)
         }
@@ -97,6 +100,7 @@ struct MenuBarReading {
         case .torrents: return t(.torrentLabel)
         case .outputMix: return t(.barAppMixerState)
         case .inputMix: return t(.barCallMixerState)
+        case .vietnamese: return t(.vietnameseLabel)
         }
     }
 

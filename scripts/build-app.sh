@@ -4,7 +4,7 @@
 # Modes:
 #   ./scripts/build-app.sh                 — only build dist/Hop.app
 #   ./scripts/build-app.sh --install       — update /Applications/Hop.app
-#   ./scripts/build-app.sh --install --dev — parallel "Hop Dev.app":
+#   ./scripts/build-app.sh --install --dev — parallel "Hop VN.app":
 #       its own bundle id (…minimo.dev) → its own settings and permissions;
 #       the main Hop.app is NOT touched and keeps running
 set -euo pipefail
@@ -22,7 +22,7 @@ for arg in "$@"; do
 done
 
 # the production Hop.app is updated ONLY via releases (latest.json on the site)
-# or an explicit --prod; day-to-day changes are installed as "Hop Dev.app"
+# or an explicit --prod; day-to-day changes are installed as "Hop VN.app"
 if [[ $INSTALL == 1 && $DEV == 0 ]]; then
     # Anton's decision (2026-07-14, strict): ONLY he installs the production
     # Hop.app himself from the DMG; only the auto-updater updates it. --prod
@@ -100,7 +100,7 @@ for icon in "${DOC_ICONS[@]}"; do
 done
 
 if [[ $DEV == 1 ]]; then
-    APP_NAME="Hop Dev"
+    APP_NAME="Hop VN"
 else
     APP_NAME="Hop"
 fi
@@ -121,8 +121,8 @@ if [[ $DEV == 1 ]]; then
     # separate identity: no conflicts with the main version over settings
     # or the login item; the canonical bundle id of the main Hop never changes
     plutil -replace CFBundleIdentifier -string "com.antonshakirov.minimo.dev" "$APP/Contents/Info.plist"
-    plutil -replace CFBundleName -string "Hop Dev" "$APP/Contents/Info.plist"
-    plutil -replace CFBundleDisplayName -string "Hop Dev" "$APP/Contents/Info.plist"
+    plutil -replace CFBundleName -string "$APP_NAME" "$APP/Contents/Info.plist"
+    plutil -replace CFBundleDisplayName -string "$APP_NAME" "$APP/Contents/Info.plist"
     plutil -replace CFBundleIdentifier -string "com.antonshakirov.minimo.dev.audio-worker" "$WORKER_APP/Contents/Info.plist"
     # SPEC: docs/spec.md — "Versioning", a dev build carries the release it is preparing.
     PREPARING="$("$BINARY" --preparing-version)"
@@ -195,6 +195,12 @@ if [[ $INSTALL == 1 ]]; then
     # pkill -x would take down the main version along with dev
     pkill -f "$TARGET/Contents/MacOS/Hop" 2>/dev/null || true
     sleep 0.5
+    if [[ $DEV == 1 ]]; then
+        # the dev build used to be "Hop Dev.app"; same bundle id, so the old
+        # copy is retired rather than left to fight the new one
+        pkill -f "/Applications/Hop Dev.app/Contents/MacOS/Hop" 2>/dev/null || true
+        rm -rf "/Applications/Hop Dev.app"
+    fi
     if [[ $DEV == 0 ]]; then
         rm -rf "/Applications/Dots.app" "/Applications/Personal Timer.app" "/Applications/Dotbar.app" "/Applications/Minimo.app"
     fi
