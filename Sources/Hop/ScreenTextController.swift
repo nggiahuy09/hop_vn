@@ -111,9 +111,34 @@ final class ScreenTextController: ObservableObject {
                                       current: key, moduleOn: ModuleActivation.isOn("ocr")) else { return }
         warming = true
         Task {
-            await Self.warmUp()
-            defaults.set(key, forKey: SettingsKey.ocrWarmedFor)
+            // A run that fails is not marked: the next launch tries again.
+            if await Self.warmUpInChildProcess() {
+                defaults.set(key, forKey: SettingsKey.ocrWarmedFor)
+            }
             warming = false
+        }
+    }
+
+    /// Runs this executable with `warmUpChildFlag`. macOS compiles Vision's
+    /// models for the executable at its path and caches them on disk, so a
+    /// child at the same path warms the cache this process reads from; the
+    /// models it loads into memory go away with it.
+    nonisolated static let warmUpChildFlag = "--ocr-warmup-child"
+
+    private nonisolated static func warmUpInChildProcess() async -> Bool {
+        guard let executable = Bundle.main.executableURL else { return false }
+        return await withCheckedContinuation { continuation in
+            let process = Process()
+            process.executableURL = executable
+            process.arguments = [warmUpChildFlag]
+            process.qualityOfService = .utility
+            process.standardOutput = FileHandle.nullDevice
+            process.standardError = FileHandle.nullDevice
+            process.terminationHandler = { finished in
+                continuation.resume(returning: finished.terminationReason == .exit
+                                    && finished.terminationStatus == 0)
+            }
+            do { try process.run() } catch { continuation.resume(returning: false) }
         }
     }
 
