@@ -4,7 +4,7 @@ public enum MenuBarMetric: String, CaseIterable, Identifiable {
     case timer, tracker, cpu, gpu, cpuTemperature, gpuTemperature
     case memory, swap, disk, diskTemperature, download, upload, battery, batteryTemperature
     case batteryHealth, batteryCycles, batteryPower, adapterPower, uptime
-    case awake, vpn, torrents, outputMix, inputMix
+    case awake, vpn, torrents, outputMix, inputMix, vietnamese
 
     public var id: String { rawValue }
 
@@ -16,6 +16,7 @@ public enum MenuBarMetric: String, CaseIterable, Identifiable {
         case .vpn: return "vpn"
         case .torrents: return "torrent"
         case .outputMix, .inputMix: return "sound"
+        case .vietnamese: return "vietnamese"
         default: return "system"
         }
     }
@@ -42,6 +43,7 @@ public enum MenuBarMetric: String, CaseIterable, Identifiable {
         case .torrents: return "arrow.down.circle"
         case .outputMix: return "speaker.wave.2"
         case .inputMix: return "mic"
+        case .vietnamese: return "character.cursor.ibeam"
         }
     }
 }
