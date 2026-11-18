@@ -68,7 +68,7 @@ terminates that exact process, and uninstalls it without `--zap`.
 Never install or launch the production cask on the development Mac: a
 temporary copy has the same bundle identity as `/Applications/Hop.app` and
 can start a second production instance. Local app verification uses only
-`./scripts/build-app.sh --install --dev` and `/Applications/Hop Dev.app`.
+`./scripts/build-app.sh --install --dev` and `/Applications/Hop VN.app`.
 `zap` is also forbidden during verification because it intentionally removes
 Hop's saved preferences and Application Support data.
 

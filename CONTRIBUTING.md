@@ -11,7 +11,7 @@ merged. The same rules apply to every commit in the repository.
   the tests and the self-tests, and checks the translations. CI runs the same
   script.
 - Try the change in the dev build: `./scripts/build-app.sh --install --dev`
-  installs `Hop Dev.app` next to the released app.
+  installs `Hop VN.app` next to the released app.
 - Keep one topic per pull request. An unrelated fix goes into its own.
 
 ## Spec, tests and docs travel with the code
