@@ -387,7 +387,7 @@ still forces the Mac off, because that is handled in hardware.
 
 Type Vietnamese in any app, in Telex or VNI. Tap Telex or VNI on the module's
 row and `vieetj` becomes `việt` and `dduwowcj` becomes `được`; in VNI,
-`viet65` does the same. `⌃⌥V` flips between off and the method you used last.
+`viet65` does the same. `⌥Space` turns it on and off; on is the method you used last.
 Words that are not Vietnamese are left as you typed them: `clear`, `show` and
 `git` read right as you type, and `text` is put back when you press space.
 Nothing you type is recorded or kept, and password fields are never touched. It

@@ -633,7 +633,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             },
             "vietnamese": { [weak self] in
                 self?.model.activity.note()
-                self?.model.vietnamese.switchMethod()
+                self?.model.vietnamese.toggle()
             },
             "sound": { [weak self] in self?.showSoundWindow() },
             "convert": { [weak self] in self?.showConverterWindow() },
