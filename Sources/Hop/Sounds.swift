@@ -65,11 +65,10 @@ enum Sounds {
         play(on ? "Pop" : "Bottle", gain: 0.5)
     }
 
-    /// Vietnamese typing switched on or off by its hotkey: a crisp tick going
-    /// on, a softer one going off — their own sounds, so neither is mistaken
-    /// for keep-awake's pop and bottle.
-    static func typingToggle(on: Bool) {
-        play(on ? "Tink" : "Morse", gain: on ? 1 : 0.6)
+    /// Vietnamese typing switched on or off by its hotkey: one crisp tick
+    /// either way, its own sound so it is not mistaken for keep-awake's pop.
+    static func typingToggle() {
+        play("Tink", gain: 1)
     }
 
     static func alarm() {

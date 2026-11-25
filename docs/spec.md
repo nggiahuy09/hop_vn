@@ -5044,10 +5044,9 @@ Found on 2026-09-17: a film downloaded, moved out of Downloads and removed with
   (`vietnameseTypingLastMethod`), from Telex or VNI it turns it off. Telex and
   VNI are traded only by the chips. The default is `⌥Space` — two keys,
   because it is pressed as often as a language is switched; `⌃Space` is
-  left alone because macOS uses it for the input source. Each change plays
-  one sound (`Sounds.typingToggle`: the system "Tink" going on, a softer
-  "Morse" going off); a blocked tap stays silent. ONE action, so ONE row in
-  the hotkey settings.
+  left alone because macOS uses it for the input source. Each change, on or
+  off, plays one tick (`Sounds.typingToggle`, the system "Tink"); a blocked
+  tap stays silent. ONE action, so ONE row in the hotkey settings.
 - **Menu bar reading** `vietnamese` (Settings → menu bar): `Telex` or `VNI`
   while typing is on, `—` while off, `!` while macOS blocks the tap. Off by
   default like every reading; the bar redraws on each change of mode.

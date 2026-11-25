@@ -98,13 +98,8 @@ final class VietnameseTypingController: ObservableObject {
     func toggle() {
         let wasOn = mode != .off
         select(wasOn ? .off : lastMethod)
-        // One sound per change, a different one each way; a blocked tap
-        // changed nothing, so it stays silent.
-        if wasOn {
-            if mode == .off { Sounds.typingToggle(on: false) }
-        } else if isActive {
-            Sounds.typingToggle(on: true)
-        }
+        // One tick per change; a blocked tap changed nothing, so it stays silent.
+        if wasOn ? mode == .off : isActive { Sounds.typingToggle() }
     }
 
     private var lastMethod: Mode {
