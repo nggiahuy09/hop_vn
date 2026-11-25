@@ -362,7 +362,7 @@ cứng.
 
 Gõ tiếng Việt trong mọi ứng dụng, kiểu Telex hoặc VNI. Bấm Telex hay VNI trên
 dòng của mô-đun, rồi `vieetj` thành `việt` và `dduwowcj` thành `được`; với VNI
-thì `viet65` cho cùng kết quả. `⌃⌥V` chuyển qua lại giữa tắt và kiểu gõ bạn dùng
+thì `viet65` cho cùng kết quả. `⌥Space` bật và tắt gõ tiếng Việt; khi bật sẽ dùng kiểu gõ bạn dùng
 gần nhất. Từ không phải tiếng Việt được giữ nguyên như bạn gõ: `clear`, `show`,
 `git` hiện đúng ngay khi gõ, còn `text` được trả lại khi bạn nhấn dấu cách. Không
 có gì bạn gõ bị ghi lại hay lưu giữ, và ô mật khẩu không bao giờ bị chạm tới. Cần

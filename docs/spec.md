@@ -5035,15 +5035,19 @@ Found on 2026-09-17: a film downloaded, moved out of Downloads and removed with
 ### Vietnamese typing
 
 - Module key `"vietnamese"`, title `vietnameseLabel` ("vietnamese typing"),
-  guide letter **v**, hotkey `⌃⌥V`, ships hidden like the other opt-in modules.
+  guide letter **v**, hotkey `⌥Space`, ships hidden like the other opt-in modules.
   ONE line in the panel: the name and three chips — `off`, `Telex`, `VNI`. The
   chips are the switch: choosing a method turns typing on, `off` turns it off.
-  "Telex" and "VNI" are names and are not translated. The hotkey trades
-  Telex and VNI; from `off` it turns typing on with the method used last
-  (`vietnameseTypingLastMethod`). `off` is reached only by its chip. Each
-  change plays one tick (`Sounds.typingMethodTick`, the system "Tink");
-  a blocked tap stays silent. ONE action, so ONE row in the
-  hotkey settings.
+  "Telex" and "VNI" are names and are not translated. The hotkey turns
+  typing on and off, like the language switch of any Vietnamese IME: from
+  `off` it turns typing on with the method used last
+  (`vietnameseTypingLastMethod`), from Telex or VNI it turns it off. Telex and
+  VNI are traded only by the chips. The default is `⌥Space` — two keys,
+  because it is pressed as often as a language is switched; `⌃Space` is
+  left alone because macOS uses it for the input source. Each change plays
+  one sound (`Sounds.typingToggle`: the system "Tink" going on, a softer
+  "Morse" going off); a blocked tap stays silent. ONE action, so ONE row in
+  the hotkey settings.
 - **Menu bar reading** `vietnamese` (Settings → menu bar): `Telex` or `VNI`
   while typing is on, `—` while off, `!` while macOS blocks the tap. Off by
   default like every reading; the bar redraws on each change of mode.
@@ -5082,7 +5086,7 @@ Found on 2026-09-17: a film downloaded, moved out of Downloads and removed with
   and in Telex the second `d` strokes the first only right after it or after
   the vowels that follow it (`ddos` and `dods` are both đó), never after a
   consonant, so `adding` and `drd` are left alone. The price is that `dad` and
-  `did` read as Vietnamese; `⌃⌥V` is the way out.
+  `did` read as Vietnamese; `⌥Space` is the way out.
 - **Where the tone goes.** `qu` and `gi` count as consonants while a vowel
   follows them (`quá`, `giờ`, but `gì`). A vowel with a mark wins, the last one
   if there are two (`ươ` → ơ, `iê` → ê); otherwise with a final consonant the

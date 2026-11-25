@@ -141,8 +141,10 @@ public enum ModuleCatalog {
                          defaultCombo: ModuleCombo(keyCode: 40, modifiers: controlOption)),
         ]),
         ModuleEntry(id: "vietnamese", hiddenOnFirstRun: true, guideLetter: "v", actions: [
+            // ⌥Space: two keys, toggled as often as a language is switched;
+            // stock macOS gives it no other job (⌃Space is the input source)
             ModuleAction(id: "open", storageKey: "hotkey_vietnamese", hotKeyID: 40,
-                         defaultCombo: ModuleCombo(keyCode: 9, modifiers: controlOption)),
+                         defaultCombo: ModuleCombo(keyCode: 49, modifiers: ModuleCombo.option)),
         ]),
         ModuleEntry(id: "vpn", hiddenOnFirstRun: true, guideLetter: "n", actions: []),
         ModuleEntry(id: "network", guideLetter: "x", actions: []),

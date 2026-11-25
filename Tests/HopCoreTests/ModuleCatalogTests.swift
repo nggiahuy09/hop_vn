@@ -245,6 +245,14 @@ final class ModuleCatalogTests: XCTestCase {
         }
     }
 
+    /// Vietnamese typing is switched on and off as often as a language is, so
+    /// its key is two keys, not a ⌃⌥ letter. SPEC: docs/spec.md — "Vietnamese typing".
+    func testVietnameseTypingTogglesOnOptionSpace() {
+        let action = ModuleCatalog.allActions.first { $0.storageKey == "hotkey_vietnamese" }
+        XCTAssertEqual(action?.defaultCombo, ModuleCombo(keyCode: 49, modifiers: ModuleCombo.option),
+                       "⌥Space")
+    }
+
     /// SPEC: docs/spec.md — "Modules": the two markup modules sit at the foot of
     /// the first space, with only the window zones below them.
     func testTheMarkupModulesSitAtTheFootOfTheFirstSpace() {

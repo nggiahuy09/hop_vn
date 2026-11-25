@@ -93,17 +93,18 @@ final class VietnameseTypingController: ObservableObject {
         if !reconcile() { refuse(askSystem: false) }
     }
 
-    /// The hotkey: Telex and VNI trade places. From "off" it turns typing on
-    /// with the method used last; "off" itself is the panel's chip.
-    func switchMethod() {
-        switch mode {
-        case .off: select(lastMethod)
-        case .telex: select(.vni)
-        case .vni: select(.telex)
+    /// The hotkey: Vietnamese on and off. On is the method used last;
+    /// changing between Telex and VNI is the panel's chips.
+    func toggle() {
+        let wasOn = mode != .off
+        select(wasOn ? .off : lastMethod)
+        // One sound per change, a different one each way; a blocked tap
+        // changed nothing, so it stays silent.
+        if wasOn {
+            if mode == .off { Sounds.typingToggle(on: false) }
+        } else if isActive {
+            Sounds.typingToggle(on: true)
         }
-        // A tick says the method changed; a blocked tap changed nothing, so
-        // it stays silent.
-        if isActive { Sounds.typingMethodTick() }
     }
 
     private var lastMethod: Mode {
