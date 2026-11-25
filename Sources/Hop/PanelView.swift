@@ -74,6 +74,7 @@ struct PanelView: View {
     @AppStorage("monitorDetailed") private var monitorDetailed = false
     @AppStorage("monitorWindowMin") private var monitorWindowMin = 5
     @AppStorage(HotkeyManager.snapHotkeysKey) private var windowsHotkeysOn = true
+    @AppStorage(WindowSnapController.centerKeepsSizeKey) private var windowsCenterKeepsSize = false
     @AppStorage(SettingsKey.menuBarRedAlert) private var menuBarRedAlert = false
     @AppStorage(SettingsKey.menuBarRedAlertBattery) private var menuBarRedAlertBattery = false
     @AppStorage(SettingsKey.menuBarIconOnly) private var menuBarIconOnly = false
@@ -5100,6 +5101,10 @@ struct PanelView: View {
             .padding(.top, 8)
         SettingsCard {
             switchSetting(t(.windowsHotkeysLabel), isOn: $windowsHotkeysOn)
+            SettingsRule()
+            // off: "centre" is a fixed 75 % × 80 % zone; on: the window keeps
+            // the size the user gave it and is only moved to the middle
+            switchSetting(t(.windowsCenterKeepsSizeLabel), isOn: $windowsCenterKeepsSize)
             if windowsHotkeysOn {
                 SettingsRule()
                 // eighteen zones in one column is a page of scrolling; two

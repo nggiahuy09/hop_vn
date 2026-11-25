@@ -38,6 +38,11 @@ final class WindowSnapController {
         }
     }
 
+    /// Settings switch: when on, "center" keeps the window's current size and
+    /// only moves it to the middle of the visible screen (clamped to fit);
+    /// when off, "center" is the fixed `unit` zone above.
+    static let centerKeepsSizeKey = "windowsCenterKeepsSize"
+
     private var lastExternalPID: pid_t?
 
     func startTracking() {
@@ -82,13 +87,28 @@ final class WindowSnapController {
         else { return }
         let visible = screen.visibleFrame
 
-        let u = position.unit
-        let target = CGRect(
-            x: visible.minX + u.minX * visible.width,
-            y: visible.minY + u.minY * visible.height,
-            width: u.width * visible.width,
-            height: u.height * visible.height
-        )
+        let target: CGRect
+        if position == .center,
+           UserDefaults.standard.bool(forKey: Self.centerKeepsSizeKey),
+           let current = currentFrame(window)?.size {
+            // keep the user's size; shrink only what does not fit the screen
+            let size = CGSize(width: min(current.width, visible.width),
+                              height: min(current.height, visible.height))
+            target = CGRect(
+                x: (visible.midX - size.width / 2).rounded(),
+                y: (visible.midY - size.height / 2).rounded(),
+                width: size.width,
+                height: size.height
+            )
+        } else {
+            let u = position.unit
+            target = CGRect(
+                x: visible.minX + u.minX * visible.width,
+                y: visible.minY + u.minY * visible.height,
+                width: u.width * visible.width,
+                height: u.height * visible.height
+            )
+        }
         // AX coordinates: origin at the top-left of the primary screen
         var axPoint = CGPoint(x: target.minX, y: primary.maxY - target.maxY)
         var axSize = CGSize(width: target.width, height: target.height)
@@ -141,7 +161,8 @@ final class WindowSnapController {
             && abs(s.width - size.width) <= 1 && abs(s.height - size.height) <= 1
     }
 
-    private func screenContaining(_ window: AXUIElement) -> NSScreen? {
+    /// The window's frame in AX coordinates (top-left origin), if readable.
+    private func currentFrame(_ window: AXUIElement) -> CGRect? {
         var posRef: CFTypeRef?
         var sizeRef: CFTypeRef?
         guard AXUIElementCopyAttributeValue(window, kAXPositionAttribute as CFString, &posRef) == .success,
@@ -154,10 +175,15 @@ final class WindowSnapController {
         var size = CGSize.zero
         AXValueGetValue(posRef as! AXValue, .cgPoint, &point)
         AXValueGetValue(sizeRef as! AXValue, .cgSize, &size)
-        guard let primary = NSScreen.screens.first?.frame else { return nil }
+        return CGRect(origin: point, size: size)
+    }
+
+    private func screenContaining(_ window: AXUIElement) -> NSScreen? {
+        guard let frame = currentFrame(window),
+              let primary = NSScreen.screens.first?.frame else { return nil }
         let center = CGPoint(
-            x: point.x + size.width / 2,
-            y: primary.maxY - point.y - size.height / 2
+            x: frame.midX,
+            y: primary.maxY - frame.midY
         )
         return NSScreen.screens.first { $0.frame.contains(center) }
     }
